@@ -18,6 +18,7 @@ RUN curl -L --silent ${DOWNLOAD_URL}/${GO_VERSION}/deb/go-server_${GO_VERSION}_a
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+RUN mkdir -p /var/lib/go-server/plugins/external && chown -R go:go /var/lib/go-server
 RUN curl -sSL https://github.com/tomzo/gocd-yaml-config-plugin/releases/download/0.2.0/yaml-config-plugin-0.2.0.jar -o /var/lib/go-server/plugins/external/yaml-config-plugin-0.2.0.jar
 RUN curl -sSL https://github.com/gocd-contrib/script-executor-task/releases/download/0.2/script-executor-0.2.jar -o /var/lib/go-server/plugins/external/script-executor-0.2.jar
 RUN curl -sSL https://github.com/ashwanthkumar/gocd-slack-build-notifier/releases/download/v1.4.0-RC11/gocd-slack-notifier-1.4.0-RC11.jar -o /var/lib/go-server/plugins/external/gocd-slack-notifier-1.4.0-RC11.jar
