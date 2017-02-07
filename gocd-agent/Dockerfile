@@ -34,4 +34,4 @@ ADD docker-entrypoint.sh /docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
-CMD ["/usr/share/go-agent/agent.sh go-agent"]
+CMD ["/usr/share/go-agent/agent.sh"]
