@@ -31,3 +31,5 @@ RUN usermod -aG docker go
 ADD docker-entrypoint.sh /docker-entrypoint.sh
 
 ENTRYPOINT /docker-entrypoint.sh
+
+CMD /bin/su - go -c '/usr/share/go-agent/agent.sh go-agent'

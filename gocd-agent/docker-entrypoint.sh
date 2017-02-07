@@ -22,4 +22,4 @@ if [ -n "$AGENT_RESOURCES" ]; then echo "agent.auto.register.resources=$AGENT_RE
 if [ -n "$AGENT_ENVIRONMENTS" ]; then echo "agent.auto.register.environments=$AGENT_ENVIRONMENTS" >>/var/lib/go-agent/config/autoregister.properties; fi
 if [ -n "$AGENT_HOSTNAME" ]; then echo "agent.auto.register.hostname=$AGENT_HOSTNAME" >>/var/lib/go-agent/config/autoregister.properties; fi
 
-/bin/su - go -c '/usr/share/go-agent/agent.sh go-agent'
+exec "$@"

@@ -6,4 +6,4 @@ AGENT_KEY="${AGENT_KEY:-123456789abcdef}"
 
 tail --follow=name /var/log/go-server/*.log | sed -u -e 's/.*/LOG: &/' &
 
-/bin/su - go -c /usr/share/go-server/server.sh
+exec "$@"
