@@ -10,13 +10,15 @@ RUN apt-get -y update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-WORKDIR /tmp
+WORKDIR /var/lib/go-server
 
 RUN curl -L --silent ${DOWNLOAD_URL}/${GO_VERSION}/deb/go-server_${GO_VERSION}_all.deb -o /tmp/go-server.deb \
-    && dpkg -i --debug=10 /tmp/go-server.deb \
+    && dpkg -i /tmp/go-server.deb \
     && sed -i -e 's/DAEMON=Y/DAEMON=N/' /etc/default/go-server \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN echo "BOOM"
 
 RUN mkdir -p /var/lib/go-server/plugins/external && chown -R go:go /var/lib/go-server
 RUN curl -sSL https://github.com/tomzo/gocd-yaml-config-plugin/releases/download/0.2.0/yaml-config-plugin-0.2.0.jar -o /var/lib/go-server/plugins/external/yaml-config-plugin-0.2.0.jar
@@ -25,13 +27,14 @@ RUN curl -sSL https://github.com/ashwanthkumar/gocd-slack-build-notifier/release
 RUN curl -sSL https://github.com/ashwanthkumar/gocd-build-github-pull-requests/releases/download/v1.3.0-RC2/stash-pr-poller-1.3.0-RC2.jar -o /var/lib/go-server/plugins/external/stash-pr-poller-1.3.0-RC2.jar
 RUN curl -sSL https://github.com/gocd-contrib/gocd-build-status-notifier/releases/download/1.2/stash-pr-status-1.2.jar -o /var/lib/go-server/plugins/external/stash-pr-status-1.2.jar
 
-VOLUME ["/var/lib/go-server", "/var/log/go-server", "/etc/go", "/go-addons", "/var/go"]
+#RUN curl -sSL https://github.com/gocd-contrib/docker-elastic-agents/releases/download/v0.6.1/docker-elastic-agents-0.6.1.jar -o /var/lib/go-server/plugins/external/docker-elastic-agents-0.6.1.jar
+
+VOLUME ["/var/lib/go-server", "/var/log/go-server", "/etc/go", "/var/go"]
 
 EXPOSE 8153 8154
-
-USER go
 
 ADD docker-entrypoint.sh /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
-CMD ["/usr/share/go-server/server.sh"]
+#CMD ["/usr/share/go-server/server.sh"]
+CMD /bin/su - go -c '/usr/share/go-server/server.sh'

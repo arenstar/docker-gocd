@@ -1,0 +1,50 @@
+version: '2'
+
+volumes:
+  gocd_data: {}
+  gocd_agent_data: {}
+  gocd_config: {}
+
+services:
+  gocd-server:
+    image: arenstar/gocd-server
+    hostname: gocd-server
+    network_mode: bridge
+    mem_limit: 1g
+    volumes:
+      - gocd_data:/var/lib/go-server
+      - gocd_config:/etc/go
+      - /opt/gocd/authorized_keys:/var/go/.ssh/authorized_keys
+      - /opt/gocd/id_rsa:/var/go/.ssh/id_rsa
+      - /opt/gocd/id_rsa.pub:/var/go/.ssh/id_rsa.pub
+      - /opt/gocd/gocd-sudo-escalation:/etc/sudoers.d/gocd-sudo-escalation
+      - /opt/gocd/.netrc:/var/go/.netrc
+      - /opt/gocd/htpasswd:/var/go/htpasswd
+      - /opt/gocd/go_notify.conf:/var/go/go_notify.conf
+    environment:
+      - AGENT_KEY=8sjsbww6e7usbxcp30
+    ports:
+      - 8153:8153
+      - 127.0.0.1:8154:8154
+  gocd-agent:
+    image: arenstar/gocd-agent
+    network_mode: bridge
+    mem_limit: 1g
+    #privileged: true
+    #replicas: 2
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - gocd_agent_data:/var/lib/go-agent/pipelines
+      - /opt/gocd/.netrc:/var/go/.netrc
+      - /opt/gocd/authorized_keys:/var/go/.ssh/authorized_keys
+      - /opt/gocd/id_rsa:/var/go/.ssh/id_rsa
+      - /opt/gocd/id_rsa.pub:/var/go/.ssh/id_rsa.pub
+      - /opt/gocd/gocd-sudo-escalation:/etc/sudoers.d/gocd-sudo-escalation
+    environment:
+      - GO_SERVER_URL=https://gocd-server:8154/go
+      - AGENT_KEY=8sjsbww6e7usbxcp30
+      - AGENT_ENVIRONMENTS=develop,live,stage
+    links:
+      - gocd-server:gocd-server
+    depends_on:
+      - gocd-server

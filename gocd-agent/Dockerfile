@@ -6,11 +6,11 @@ ARG DOWNLOAD_URL="https://download.gocd.io/binaries"
 
 # Install GoCD
 RUN apt-get -y update \
-    && apt-get install -y -q unzip git iptables init-system-helpers libapparmor1 libltdl7 \
+    && apt-get install -y -q unzip git iptables init-system-helpers libapparmor1 libltdl7 make \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-WORKDIR /tmp
+WORKDIR /var/lib/go-agent
 
 RUN curl -L --silent ${DOWNLOAD_URL}/${GO_VERSION}/deb/go-agent_${GO_VERSION}_all.deb -o /tmp/go-agent.deb \
     && dpkg -i /tmp/go-agent.deb \
@@ -28,10 +28,10 @@ RUN curl -k -L "https://github.com/docker/compose/releases/download/1.10.0/docke
 RUN usermod -aG docker root
 RUN usermod -aG docker go
 
-USER go
-
 ADD docker-entrypoint.sh /docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
-CMD ["/usr/share/go-agent/agent.sh"]
+#CMD ["/usr/share/go-agent/agent.sh"]
+
+CMD /bin/su - go -c '/usr/share/go-agent/agent.sh'
