@@ -1,4 +1,4 @@
-# Build using: docker build --build-arg GO_VERSION=16.x.x-xxxx -t gocd-agent .
+# Build using: docker build --build-arg GO_VERSION=17.x.x-xxxx -t gocd-agent .
 
 FROM openjdk:8u111-jre
 ARG GO_VERSION=17.1.0-4511
