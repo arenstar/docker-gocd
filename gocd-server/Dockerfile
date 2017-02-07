@@ -3,7 +3,6 @@
 FROM openjdk:8u111-jre
 ARG GO_VERSION=17.1.0-4511
 ARG DOWNLOAD_URL=https://download.gocd.io/binaries
-MAINTAINER GoCD <go-cd-dev@googlegroups.com>
 
 # Install GoCD
 RUN apt-get -y update \
