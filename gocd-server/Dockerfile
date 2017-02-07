@@ -29,6 +29,8 @@ VOLUME ["/var/lib/go-server", "/var/log/go-server", "/etc/go", "/go-addons", "/v
 
 EXPOSE 8153 8154
 
+USER go
+
 ADD docker-entrypoint.sh /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
