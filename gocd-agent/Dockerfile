@@ -28,8 +28,10 @@ RUN curl -k -L "https://github.com/docker/compose/releases/download/1.10.0/docke
 RUN usermod -aG docker root
 RUN usermod -aG docker go
 
+USER go
+
 ADD docker-entrypoint.sh /docker-entrypoint.sh
 
-ENTRYPOINT /docker-entrypoint.sh
+ENTRYPOINT ["/docker-entrypoint.sh"]
 
-CMD /bin/su - go -c '/usr/share/go-agent/agent.sh go-agent'
+CMD ["/usr/share/go-agent/agent.sh go-agent"]
