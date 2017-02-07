@@ -1,4 +1,4 @@
-# Build using: docker build --build-arg GO_VERSION=16.x.x-xxxx -t gocd-agent .
+# Build using: docker build --build-arg GO_VERSION=17.x.x-xxxx -t gocd-agent .
 
 FROM openjdk:8u111-jre
 ARG GO_VERSION=17.1.0-4511
@@ -28,8 +28,10 @@ RUN curl -k -L "https://github.com/docker/compose/releases/download/1.10.0/docke
 RUN usermod -aG docker root
 RUN usermod -aG docker go
 
+USER go
+
 ADD docker-entrypoint.sh /docker-entrypoint.sh
 
-ENTRYPOINT /docker-entrypoint.sh
+ENTRYPOINT ["/docker-entrypoint.sh"]
 
-CMD /bin/su - go -c '/usr/share/go-agent/agent.sh go-agent'
+CMD ["/usr/share/go-agent/agent.sh go-agent"]

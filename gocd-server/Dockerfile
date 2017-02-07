@@ -1,4 +1,4 @@
-# Build using: docker build --build-arg GO_VERSION=16.x.x-xxxx -t alpine-gocd-server .
+# Build using: docker build --build-arg GO_VERSION=17.x.x-xxxx -t alpine-gocd-server .
 
 FROM openjdk:8u111-jre
 ARG GO_VERSION=17.1.0-4511
@@ -29,7 +29,9 @@ VOLUME ["/var/lib/go-server", "/var/log/go-server", "/etc/go", "/go-addons", "/v
 
 EXPOSE 8153 8154
 
-ADD docker-entrypoint.sh /docker-entrypoint.sh
-ENTRYPOINT /docker-entrypoint.sh
+USER go
 
-CMD /bin/su - go -c /usr/share/go-server/server.sh
+ADD docker-entrypoint.sh /docker-entrypoint.sh
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
+CMD ["/usr/share/go-server/server.sh"]
